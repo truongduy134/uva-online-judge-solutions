@@ -6,14 +6,7 @@
  *	+ Since the operators are only + and *, we can use the greedy approach
  *		to get the maxmium and minimum values.
  *	+ To get the maximum values, group and perform all the additions first.
- *	  To get the minimum values, group and perform all the multiplication first.
- *	+ Time complexity: O(n) where n is length of the expression.
-
- * Important note: the maximum value can be as large as 20^12. So use 64-bit integers
- *
- * Side note:
- *	+ The above algorithm is not correct when the input number can be 0.
- *	  Counter example: 0+0*0+1
+ *	  To get the minimu values, group and perform all the multiplication first.
  */
 
 #include <stdio.h>
@@ -24,7 +17,7 @@ const int MAX_NUM_NUM = 12;
 const char ADD = '+';
 const char MUL = '*';
 
-long long int performGreedyCalculation(int numArr[], char operatorArr[], int numNum,
+int performGreedyCalculation(int numArr[], char operatorArr[], int numNum,
 			     char firstOp, char secondOp);
 int parseExpression(char line[], int numArr[], char operatorArr[]);
 
@@ -41,7 +34,7 @@ int main(void)
 		gets(line);
 		numNum = parseExpression(line, numArr, operatorArr);
 
-		printf("The maximum and minimum are %lld and %lld.\n",
+		printf("The maximum and minimum are %d and %d.\n",
 			performGreedyCalculation(numArr, operatorArr, numNum, ADD, MUL),
 			performGreedyCalculation(numArr, operatorArr, numNum, MUL, ADD));
 		T--;
@@ -73,11 +66,10 @@ int parseExpression(char line[], int numArr[], char operatorArr[])
 }
 
 /* Group and perform all operators of type firstOp first. */
-long long int performGreedyCalculation(int numArr[], char operatorArr[], int numNum,
+int performGreedyCalculation(int numArr[], char operatorArr[], int numNum,
 			     char firstOp, char secondOp)
 {
-	int i, numInd, opInd, sizeArr; 
-	long long int resultArr[MAX_NUM_NUM], val;
+	int i, val, numInd, opInd, resultArr[MAX_NUM_NUM], sizeArr;
 
 	sizeArr = 0;
 	resultArr[sizeArr] = numArr[0];
@@ -87,13 +79,13 @@ long long int performGreedyCalculation(int numArr[], char operatorArr[], int num
 		if(operatorArr[i] == firstOp)
 		{
 			if(firstOp == ADD)
-				resultArr[sizeArr - 1] += (long long int) numArr[i + 1];
+				resultArr[sizeArr - 1] += numArr[i + 1];
 			else
-				resultArr[sizeArr - 1] *= (long long int) numArr[i + 1];
+				resultArr[sizeArr - 1] *= numArr[i + 1];
 		}
 		else
 		{
-			resultArr[sizeArr] = (long long int) numArr[i + 1];
+			resultArr[sizeArr] = numArr[i + 1];
 			sizeArr++;
 		}
 	}
